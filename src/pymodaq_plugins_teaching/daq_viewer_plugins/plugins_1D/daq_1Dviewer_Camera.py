@@ -115,15 +115,14 @@ class DAQ_1DViewer_Camera(DAQ_Viewer_base):
         ## TODO for your custom plugin: you should choose EITHER the synchrone or the asynchrone version following
 
         ##synchrone version (blocking function)
-        data_1D=self.controller.your_method_to_start_a_grab_snap()
-        self.dte_signal.emit(DataToExport('myplugin',
-                                          data=[DataFromPlugins(name='Mock1', data=data_tot,
-                                                                dim='Data1D', labels=['dat0', 'data1'],
-                                                                axes=[self.x_axis])]))
+        Data_1D=self.controller.grab_spectrum()
+        wavelength_array = self.controller.get_wavelength_axis()
+        self.dte_signal.emit(
+            DataToExport(name='myplugin',
+                         data=[DataFromPlugins(name='Spectrum', data=[Data_1D],
+                                               dim='Data1D', labels=['Spectrum'],
+                                               axes=[Axis('wavelength', units='m', data='wavelength_array')]
 
-        ##asynchrone version (non-blocking function with callback)
-        self.controller.your_method_to_start_a_grab_snap(self.callback)
-        #########################################################
 
 
     def callback(self):
