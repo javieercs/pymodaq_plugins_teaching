@@ -40,6 +40,8 @@ class DAQ_Move_Monochromator(DAQ_Move_base):
     params = [
                  {'title': 'Tau (ms)','name': 'tau','type': 'float', 'value': 1000.,
                   'suffix': 'ms','visible': True, 'readonly': False},
+                 {'title': 'Grating','name':'grating', 'type': 'list', 'value': None,
+                  'limits': []}
              ] + comon_parameters_fun(is_multiaxes, axis_names=_axis_names, epsilon=_epsilon)
 
     # _epsilon is the initial default value for the epsilon parameter allowing pymodaq to know if the controller reached
@@ -92,7 +94,8 @@ class DAQ_Move_Monochromator(DAQ_Move_base):
         """
         if param.name() == 'tau':
             self.controller.tau = param.value()/1000
-
+        elif param.name() == 'grating':
+            self.controller.grating = param.value()
         else:
             pass
 
@@ -120,6 +123,8 @@ class DAQ_Move_Monochromator(DAQ_Move_base):
 
         if initialized:
             self.settings.child('tau').setValue(self.controller.tau*1000)
+            self.settings.child('grating').setLimits(self.controller.gratings)
+            self.settings.child('grating').setValue(self.controller.grating)
 
         info = "Whatever info you want to log"
         return info, initialized
@@ -160,4 +165,4 @@ class DAQ_Move_Monochromator(DAQ_Move_base):
 
 
 if __name__ == '__main__':
-    main(__file__, init=false)
+    main(__file__, init=False)
