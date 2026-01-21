@@ -37,8 +37,11 @@ class DAQ_Move_Monochromator(DAQ_Move_base):
     data_actuator_type = DataActuatorType.DataActuator  # wether you use the new data style for actuator otherwise set this
     # as  DataActuatorType.float  (or entirely remove the line)
 
-    params = [   # TODO for your custom plugin: elements to be added here as dicts in order to control your custom stage
-                ] + comon_parameters_fun(is_multiaxes, axis_names=_axis_names, epsilon=_epsilon)
+    params = [
+                 {'title': 'Tau (ms)','name': 'tau','type': 'float', 'value': 1000.,
+                  'suffix': 'ms','visible': True, 'readonly': False},
+             ] + comon_parameters_fun(is_multiaxes, axis_names=_axis_names, epsilon=_epsilon)
+
     # _epsilon is the initial default value for the epsilon parameter allowing pymodaq to know if the controller reached
     # the target value. It is the developer responsibility to put here a meaningful value
 
