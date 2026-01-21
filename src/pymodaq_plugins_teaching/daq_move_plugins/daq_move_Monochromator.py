@@ -90,15 +90,9 @@ class DAQ_Move_Monochromator(DAQ_Move_base):
         param: Parameter
             A given parameter (within detector_settings) whose value has been changed by the user
         """
-        ## TODO for your custom plugin
-        if param.name() == 'axis':
-            self.axis_unit = self.controller.your_method_to_get_correct_axis_unit()
-            # do this only if you can and if the units are not known beforehand, for instance
-            # if the motors connected to the controller are of different type (mm, µm, nm, , etc...)
-            # see BrushlessDCMotor from the thorlabs plugin for an exemple
+        if param.name() == 'tau':
+            self.controller.tau = param.value()/1000
 
-        elif param.name() == "a_parameter_you've_added_in_self.params":
-           self.controller.your_method_to_apply_this_param_change()
         else:
             pass
 
@@ -120,10 +114,12 @@ class DAQ_Move_Monochromator(DAQ_Move_base):
         if self.is_master:  # is needed when controller is master
             self.controller = Spectrometer() #  arguments for instantiation!)
             initialized = self.controller.open_communication()
-
         else:
             self.controller = controller
             initialized = True
+
+        if initialized:
+            self.settings.child('tau').setValue(self.controller.tau*1000)
 
         info = "Whatever info you want to log"
         return info, initialized
@@ -164,4 +160,4 @@ class DAQ_Move_Monochromator(DAQ_Move_base):
 
 
 if __name__ == '__main__':
-    main(__file__)
+    main(__file__, init=false)
